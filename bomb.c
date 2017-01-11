@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 #define ARRAYLENGTH  30000
 
 int runInstruction (char instruction);
@@ -10,6 +11,17 @@ char currChar;
 int main(int argc, char*argv[]) {
 	if (argc != 2) {
 		printf("One argument expected.\n");
+		return -1;
+	}
+
+	// Check if file exists and if user has permission to read it
+	if (access(argv[1], F_OK) == -1) {
+		printf("File does not exist.\n");
+		return -1;
+	}
+
+	if (access(argv[1], R_OK) == -1) {
+		printf("User does not have permission to read the file.\n");
 		return -1;
 	}
 
