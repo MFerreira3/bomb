@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #define ARRAYLENGTH  30000
 
-int runInstruction (char instruction);
+void runInstruction (char instruction);
 
-char bfData[ARRAYLENGTH], pointer = 0;
+int bfData[ARRAYLENGTH], pointer = 0;
 FILE *fp;
 char currChar;
 
@@ -43,7 +44,7 @@ int main(int argc, char*argv[]) {
 	return fclose(fp);
 }
 
-int runInstruction(char instruction) {
+void runInstruction(char instruction) {
 	// Define where the current loop starts
 	int loopBeginning = 0;
 
@@ -92,8 +93,6 @@ int runInstruction(char instruction) {
 							// Break the current loop
 							break;
 						}
-					} else if (currChar == EOF) {
-						// TODO We need an EOF verification here pls and ty
 					} else {
 						runInstruction(currChar);
 						currChar = fgetc(fp);
@@ -102,10 +101,18 @@ int runInstruction(char instruction) {
 			} else {
 				// Jump to the next closing bracket
 				while (currChar != ']') {
+					if (currChar == EOF) {
+						exit(fclose(fp));
+					}
+
 					currChar = fgetc(fp);
 				}
 			}
 			break;
+
+		case EOF:
+			// Kill Bomb
+			exit(fclose(fp));
 	}
 
 }
