@@ -99,14 +99,18 @@ void runInstruction(char instruction) {
 					}
 				}
 			} else {
-				// Jump to the next closing bracket
-				while (currChar != ']') {
-					if (currChar == EOF) {
-						exit(fclose(fp));
-					}
+				int cLoops = 1;
 
+				do {
 					currChar = fgetc(fp);
-				}
+
+					if (currChar == EOF)
+						exit(fclose(fp));
+					else if (currChar == '[')
+						cLoops++;
+					else if (currChar == ']')
+						cLoops--;
+				} while (currChar != ']' || cLoops > 0);
 			}
 			break;
 
